@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,16 +10,46 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-public class Handle {
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
-	private ObjectInputStream ois;
-	private ObjectOutputStream oos;
+public class ServerHandle {
 
-	public Handle(ObjectInputStream ois, ObjectOutputStream oos) {
+	private DataInputStream dis;
+	private DataOutputStream dos;
+
+	public ServerHandle(DataInputStream dis, DataOutputStream dos) {
 		super();
-		this.ois = ois;
-		this.oos = oos;
+		this.dis = dis;
+		this.dos = dos;
 	}
+	
+	public void handle() {
+		
+		closeAll();
+	}
+	
+	// 发送json数据
+		public void sendJson(JSONObject json) {
+			try {
+				dos.write(json.toString().getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+//		接收json数据
+		public JSONObject receiveJson() {
+			byte[] buf = new byte[1024 * 8];
+			try {
+				dis.read(buf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return JSON.parseObject(new String(buf));
+		}
 
 //	进行选择性处理
 	public void select() {
@@ -94,8 +126,8 @@ public class Handle {
 //	关闭所有接口
 	public void closeAll() {
 		try {
-			ois.close();
-			oos.close();
+			dis.close();
+			dos.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,12 +1,12 @@
 package net;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import utils.Handle;
+import utils.ServerHandle;
 
 public class Server {
 
@@ -16,21 +16,22 @@ public class Server {
 		this.server = new ServerSocket(8000);
 	}
 
-//	监听用户请求
+//	监听和处理用户请求
 	public void listening() throws IOException {
 		while (true) {
 			final Socket socket = server.accept();
 			new Thread() {
 				public void run() {
-					try {
-						Handle handle = new Handle(
-								new ObjectInputStream(socket.getInputStream()),
-								new ObjectOutputStream(socket.getOutputStream()));
-						socket.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						try {
+							new ServerHandle(
+									new DataInputStream(socket.getInputStream()),
+									new DataOutputStream(socket.getOutputStream())
+							).handle();
+							socket.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				}
 			}.start();
 		}
