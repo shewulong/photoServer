@@ -1,12 +1,15 @@
 package net;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import utils.ServerHandle;
+import dao.BaseDao;
 
 public class Server {
 
@@ -18,17 +21,18 @@ public class Server {
 
 //	监听和处理用户请求
 	public void listening() throws IOException {
+		BaseDao.init();
 		while (true) {
 			final Socket socket = server.accept();
 			new Thread() {
 				public void run() {
 						try {
 							new ServerHandle(
-									new DataInputStream(socket.getInputStream()),
-									new DataOutputStream(socket.getOutputStream())
+									new BufferedReader(new InputStreamReader(socket.getInputStream())),
+									new PrintStream(socket.getOutputStream())
 							).handle();
 							socket.close();
-						} catch (IOException e) {
+						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}

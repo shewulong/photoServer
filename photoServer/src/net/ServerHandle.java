@@ -1,63 +1,56 @@
-package utils;
+package net;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import service.Tools;
+
 public class ServerHandle {
 
-	private DataInputStream dis;
-	private DataOutputStream dos;
+	private BufferedReader in;
+	private PrintStream out;
 
-	public ServerHandle(DataInputStream dis, DataOutputStream dos) {
+	public ServerHandle(BufferedReader in, PrintStream out) {
 		super();
-		this.dis = dis;
-		this.dos = dos;
+		this.in = in;
+		this.out = out;
 	}
-	
-	public void handle() {
-		
+
+	public void handle() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		JSONObject json = receiveJson();
+		Class<?> clazz = Class.forName(json.getString("clazz"));
+		Tools tools = (Tools) clazz.newInstance();
+		sendJson(tools.work(json));
 		closeAll();
 	}
-	
-	// 发送json数据
-		public void sendJson(JSONObject json) {
-			try {
-				dos.write(json.toString().getBytes());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+// 发送json数据
+	public void sendJson(JSONObject json) {
+		out.println(json.toString());
+	}
+
+//	接收json数据
+	public JSONObject receiveJson() {
+		try {
+			return JSON.parseObject(in.readLine());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-//		接收json数据
-		public JSONObject receiveJson() {
-			byte[] buf = new byte[1024 * 8];
-			try {
-				dis.read(buf);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return JSON.parseObject(new String(buf));
-		}
-
-//	进行选择性处理
-	public void select() {
-
+		return null;
 	}
 
 //	登录验证
-	public int login(Map map) {
+	public int login(JSONObject json) {
 
 		return 0;
 	}
@@ -126,8 +119,8 @@ public class ServerHandle {
 //	关闭所有接口
 	public void closeAll() {
 		try {
-			dis.close();
-			dos.close();
+			in.close();
+			out.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
