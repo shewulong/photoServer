@@ -26,16 +26,14 @@ public class Server {
 			final Socket socket = server.accept();
 			new Thread() {
 				public void run() {
-						try {
-							new ServerHandle(
-									new BufferedReader(new InputStreamReader(socket.getInputStream())),
-									new PrintStream(socket.getOutputStream())
-							).handle();
-							socket.close();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+					try {
+						new ServerHandle(new BufferedReader(new InputStreamReader(socket.getInputStream())),
+								new PrintStream(socket.getOutputStream())).handle();
+						socket.close();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}.start();
 		}

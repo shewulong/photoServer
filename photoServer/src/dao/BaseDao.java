@@ -2,7 +2,6 @@ package dao;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -14,7 +13,9 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.mysql.cj.protocol.Resultset;
+import com.alibaba.fastjson.JSONArray;
+
+import utils.RsToJson;
 
 public class BaseDao {
 
@@ -36,13 +37,30 @@ public class BaseDao {
 		}
 	}
 
-//	为每个用户创建一个表格保存数据
-	public void createTable(int id) {
-
+//	为每个用户创建一个表格保存图片路径
+	public void createImgTab(String uid) {
+		PreparedStatement pstemt = null;
+		String sql = null;
+		try {
+			sql = "create table ? ("
+					+ "timestamp bigint not null,"
+					+ "gid int not null,"
+					+ "name varchar(32) not null,"
+					+ "path varchar(32) not null,"
+					+ "primary key (timestamp)"
+					+ ");";
+			pstemt = conn.prepareStatement(sql);
+			pstemt.setString(1, uid);
+			pstemt.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
 	}
 
 //	登录验证
-	public static ResultSet login(String name, String password) {
+	public static JSONArray login(String name, String password) {
 		PreparedStatement pstemt = null;
 		ResultSet rs = null;
 		String sql = null;
@@ -52,18 +70,17 @@ public class BaseDao {
 			pstemt.setString(1, name);
 			rs = pstemt.executeQuery();
 			if(!rs.next()) {
-				return null;
+				return new JSONArray();
 			}
 			if (!password.equals(rs.getString(1))) {
-				return null;
+				return new JSONArray();
 			}
 
 			sql = "select * from user where name=?";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setString(1, name);
 			rs = pstemt.executeQuery();
-			if(rs.next())
-				return rs;
+			return RsToJson.convert(rs);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,12 +103,11 @@ public class BaseDao {
 			}
 
 			String uid = UUID.randomUUID().toString().replace("-", "");
-			sql = "insert into user (uid,name,password,gcount) values(?,?,?,?)";
+			sql = "insert into user (uid,name,password) values(?,?,?)";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setString(1, uid);
 			pstemt.setString(2, name);
 			pstemt.setString(3, password);
-			pstemt.setInt(4, 0);
 			pstemt.execute();
 			return 1;
 		} catch (SQLException e) {

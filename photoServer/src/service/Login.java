@@ -1,5 +1,6 @@
 package service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.BaseDao;
@@ -9,17 +10,27 @@ import dao.BaseDao;
 public class Login implements Tools {
 
 	@Override
-	public JSONObject work(JSONObject json) {
+	public JSONArray work(JSONArray jsonArr) {
+		JSONObject json = jsonArr.getJSONObject(1);
 		String name = json.getString("name");
 		String password = json.getString("password");
-		JSONObject result = new JSONObject();
-		result.put("clazz", this.getClass().toString());
-		result.put("rs", BaseDao.login(name, password));
-		return result;
+		jsonArr.clear();
+		jsonArr.addAll(BaseDao.login(name, password));
+		return jsonArr;
 	}
 
 	public static void main(String[] args) {
-		System.out.println(new Login().getClass().toString());
+		BaseDao.init();
+		JSONArray jsonArr = new JSONArray();
+		JSONObject clazz = new JSONObject();
+		JSONObject json = new JSONObject();
+		clazz.put("clazz", "service.Login");
+		json.put("name", "yuki");
+		json.put("password", "123456");
+		jsonArr.add(clazz);
+		jsonArr.add(json);
+		
+		System.out.println(new Login().work(jsonArr));
 	}
 
 }

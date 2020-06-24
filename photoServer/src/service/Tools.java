@@ -1,7 +1,7 @@
 package service;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
 
 public interface Tools {
-	public JSONObject work(JSONObject josn);
+	public JSONArray work(JSONArray JsonArr);
 }
