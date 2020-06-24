@@ -15,8 +15,8 @@ public class SaveImage implements Tools {
 		long timestamp = new Date().getTime();
 		String uid = json.getString("uid");
 		int gid = json.getInteger("gid");
-		byte[] img = json.getBytes("img");
-		int status = BaseDao.saveImage(timestamp, uid, gid, img);
+		byte[] image = json.getBytes("image");
+		int status = BaseDao.saveImage(timestamp, uid, gid, image);
 		jsonArr.clear();
 		JSONObject result = new JSONObject();
 		result.put("status", status);

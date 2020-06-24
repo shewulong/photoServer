@@ -8,12 +8,12 @@ import com.alibaba.fastjson.JSONArray;
 
 import service.Tools;
 
-public class ServerHandle {
+public class Handle {
 
 	private BufferedReader in;
 	private PrintStream out;
 
-	public ServerHandle(BufferedReader in, PrintStream out) {
+	public Handle(BufferedReader in, PrintStream out) {
 		super();
 		this.in = in;
 		this.out = out;

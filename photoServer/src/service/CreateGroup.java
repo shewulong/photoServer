@@ -12,7 +12,7 @@ public class CreateGroup implements Tools {
 		JSONObject json = jsonArr.getJSONObject(1);
 		String uid = json.getString("uid");
 		String groupName = json.getString("groupName");
-		int status = BaseDao.insertGroup(uid, groupName);
+		int status = BaseDao.createGroup(uid, groupName);
 		jsonArr.clear();
 		JSONObject result = new JSONObject();
 		result.put("status", status);

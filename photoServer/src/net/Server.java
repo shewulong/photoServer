@@ -27,7 +27,7 @@ public class Server {
 			new Thread() {
 				public void run() {
 					try {
-						new ServerHandle(new BufferedReader(new InputStreamReader(socket.getInputStream())),
+						new Handle(new BufferedReader(new InputStreamReader(socket.getInputStream())),
 								new PrintStream(socket.getOutputStream())).handle();
 						socket.close();
 					} catch (Exception e) {
