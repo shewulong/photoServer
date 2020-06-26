@@ -143,12 +143,11 @@ public class BaseDao {
 			while (rs.next()) {
 				gid = rs.getInt("gcount") + 1;
 			}
-			sql = "insert into groups (uid,gid,gname,imgcount) values(?,?,?,?);";
+			sql = "insert into groups (uid,gid,gname) values(?,?,?);";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setString(1, uid);
 			pstemt.setInt(2, gid);
 			pstemt.setString(3, groupName);
-			pstemt.setInt(4, 0);
 			pstemt.execute();
 			sql = "update user set gcount=gcount+1 where uid=?;";
 			pstemt = conn.prepareStatement(sql);
@@ -183,7 +182,7 @@ public class BaseDao {
 	}
 
 //	删除分组
-	public static int deleteGroup(String uid, int gid, int all) {
+	public static int deleteGroup(String uid, int gid, int allFlag) {
 		if (gid == 1)
 			return 0;
 		PreparedStatement pstemt = null;
@@ -194,13 +193,17 @@ public class BaseDao {
 			pstemt.setString(1, uid);
 			pstemt.setInt(2, gid);
 			pstemt.execute();
-			if (all == 1) {
+			if (allFlag == 1) {
 				sql = "delete from images where uid=? and gid=?;";
 				pstemt = conn.prepareStatement(sql);
 				pstemt.setString(1, uid);
 				pstemt.setInt(2, gid);
 				pstemt.execute();
 			}
+			sql = "update images set gid=1 where gid=?;";
+			pstemt = conn.prepareStatement(sql);
+			pstemt.setInt(1, gid);
+			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -231,16 +234,17 @@ public class BaseDao {
 	}
 
 //	保存照片
-	public static int saveImage(long timestamp, String uid, int gid, byte[] image) {
+	public static int saveImage(long timestamp, String uid, int gid, String name, byte[] image) {
 		PreparedStatement pstemt = null;
 		String sql = null;
 		try {
-			sql = "insert into images (timestamp,uid,gid,image) values(?,?,?,?);";
+			sql = "insert into images (timestamp,uid,gid,name,image) values(?,?,?,?,?);";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setLong(1, timestamp);
 			pstemt.setString(2, uid);
 			pstemt.setInt(3, gid);
-			pstemt.setBytes(4, image);
+			pstemt.setString(4, name);
+			pstemt.setBytes(5, image);
 			pstemt.execute();
 			return 1;
 		} catch (SQLException e) {
@@ -268,7 +272,7 @@ public class BaseDao {
 		return 0;
 	}
 
-//	按类型查询图片
+//	按分组查询图片
 	public static JSONArray queryByTyte(String uid, int gid) {
 		PreparedStatement pstemt = null;
 		ResultSet rs = null;
@@ -323,14 +327,15 @@ public class BaseDao {
 	}
 
 //	修改头像
-	public static int updateAvatar(String uid, byte[] image) {
+	public static int updateAvatar(String uid, String avaname, byte[] image) {
 		PreparedStatement pstemt = null;
 		String sql = null;
 		try {
-			sql = "update user set avatar=? where uid=?;";
+			sql = "update user set avaname=?,avatar=? where uid=?;";
 			pstemt = conn.prepareStatement(sql);
-			pstemt.setBytes(1, image);
-			pstemt.setString(2, uid);
+			pstemt.setString(1, avaname);
+			pstemt.setBytes(2, image);
+			pstemt.setString(3, uid);
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
