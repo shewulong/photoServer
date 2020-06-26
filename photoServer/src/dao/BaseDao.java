@@ -23,13 +23,13 @@ public class BaseDao {
 	public static void init() {
 		try {
 			Properties properties = new Properties();
-			InputStream is;
-			is = new BufferedInputStream(new FileInputStream("config.properties"));
-			properties.load(is);
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream("config.properties"));
+			properties.load(bis);
 			String url = properties.getProperty("url");
 			String user = properties.getProperty("user");
 			String password = properties.getProperty("password");
 			conn = DriverManager.getConnection(url, user, password);
+			bis.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -354,39 +354,8 @@ public class BaseDao {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException {
-		BaseDao.init();
-//		System.out.println(BaseDao.login("mafu", "123456"));
-		System.out.println(BaseDao.register("mafu", "123456"));
-//		System.out.println(BaseDao.insertGroup("99d0555fbbbb4700ac0ede33b5202660", "hello"));
-//		FileInputStream fis = new FileInputStream("./images/yui.jpg");
-//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//		int b;
-//		while((b = fis.read()) != -1) {
-//			baos.write(b);
-//		}
-//		byte[] img = baos.toByteArray();
-//		System.out.println(BaseDao.saveImage(new Date().getTime(), "99d0555fbbbb4700ac0ede33b5202660", 2, img));
-//		System.out.println(BaseDao.updateAvatar("99d0555fbbbb4700ac0ede33b5202660", img));
-
-//		JSONArray jsonArr = BaseDao.queryByTyte("ed84e2add80a4451b89f11350295f0aa", 1);
-//		JSONArray jsonArr = BaseDao.queryByTime("99d0555fbbbb4700ac0ede33b5202660", 1592997639870L);
-//		for (int i = 0; i < jsonArr.size(); i++) {
-//			JSONObject json = jsonArr.getJSONObject(i);
-//			FileOutputStream fos = new FileOutputStream("./images/down.jpg");
-//			byte[] img = json.getBytes("image");
-//			System.out.println(json);
-//			fos.write(img, 0, img.length);
-//			fos.close();
-//		}
-
-//		System.out.println(BaseDao.deleteImage("99d0555fbbbb4700ac0ede33b5202660", 1, 1592997633802L));
-//		System.out.println(BaseDao.updateGroupName("99d0555fbbbb4700ac0ede33b5202660", 2, "good"));
-//		System.out.println(BaseDao.deleteGroup("99d0555fbbbb4700ac0ede33b5202660", 2, 0));
-//		System.out.println(BaseDao.updateImageGroup("99d0555fbbbb4700ac0ede33b5202660", 2, 1592997639870L, 1));
-//		System.out.println(BaseDao.updateSignature("99d0555fbbbb4700ac0ede33b5202660", "hello world"));
-		BaseDao.close();
-
+	public static void main(String[] args) {
+		
 	}
 
 }
