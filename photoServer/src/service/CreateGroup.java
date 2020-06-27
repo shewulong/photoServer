@@ -2,10 +2,13 @@ package service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import dao.BaseDao;
-
-public class CreateGroup implements Tools {
+/*
+ * 调用BaseDao的createGroup方法
+ * 创建分组
+ * 返回状态
+ */
+public class CreateGroup implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {

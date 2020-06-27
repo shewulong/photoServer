@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.BaseDao;
+import utils.RsToJson;
 /*
+ * 调用BaseDao的login方法
  * 登录验证
+ * 返回状态及用户信息
  */
-public class Login implements Tools {
+public class Login implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {
@@ -15,7 +18,7 @@ public class Login implements Tools {
 		String name = json.getString("name");
 		String password = json.getString("password");
 		jsonArr.clear();
-		jsonArr.addAll(BaseDao.login(name, password));
+		jsonArr.addAll(RsToJson.convert(BaseDao.login(name, password)));
 		return jsonArr;
 	}
 

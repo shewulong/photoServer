@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.BaseDao;
-
-public class Register implements Tools {
+/*
+ * 调用BaseDao的register方法
+ * 注册用户
+ * 返回状态
+ */
+public class Register implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {

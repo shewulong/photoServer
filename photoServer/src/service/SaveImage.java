@@ -6,8 +6,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.BaseDao;
-
-public class SaveImage implements Tools {
+/*
+ * 调用BaseDao的saveImage方法
+ * 保存图片数据到数据库
+ * 返回保存状态
+ */
+public class SaveImage implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {

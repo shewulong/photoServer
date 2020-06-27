@@ -6,7 +6,7 @@ import java.io.PrintStream;
 
 import com.alibaba.fastjson.JSONArray;
 
-import service.Tools;
+import service.PassData;
 
 public class Handle {
 
@@ -19,10 +19,11 @@ public class Handle {
 		this.out = out;
 	}
 
-	public void handle() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+//	处理请求
+	public void handle() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		JSONArray json = receiveJson();
 		Class<?> clazz = Class.forName(json.getJSONObject(0).getString("clazz"));
-		Tools tools = (Tools) clazz.newInstance();
+		PassData tools = (PassData) clazz.newInstance();
 		sendJson(tools.work(json));
 		closeAll();
 	}

@@ -19,7 +19,7 @@ import utils.RsToJson;
 public class BaseDao {
 
 	private static Connection conn = null;
-
+//	初始化连接
 	public static void init() {
 		try {
 			Properties properties = new Properties();
@@ -37,7 +37,7 @@ public class BaseDao {
 	}
 
 //	登录验证
-	public static JSONArray login(String name, String password) {
+	public static ResultSet login(String name, String password) {
 		PreparedStatement pstemt = null;
 		ResultSet rs = null;
 		String sql = null;
@@ -47,17 +47,16 @@ public class BaseDao {
 			pstemt.setString(1, name);
 			rs = pstemt.executeQuery();
 			if (!rs.next()) {
-				return new JSONArray();
+				return null;
 			}
 			if (!password.equals(rs.getString(1))) {
-				return new JSONArray();
+				return null;
 			}
 
 			sql = "select * from user where name=?";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setString(1, name);
-			rs = pstemt.executeQuery();
-			return RsToJson.convert(rs);
+			return pstemt.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -273,16 +272,14 @@ public class BaseDao {
 	}
 
 //	按分组查询图片
-	public static JSONArray queryByTyte(String uid, int gid) {
+	public static ResultSet queryByTyte(String uid, int gid) {
 		PreparedStatement pstemt = null;
-		ResultSet rs = null;
 		String sql = null;
 		try {
 			sql = "select * from images where gid=?;";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setInt(1, gid);
-			rs = pstemt.executeQuery();
-			return RsToJson.convert(rs);
+			return pstemt.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -291,7 +288,7 @@ public class BaseDao {
 	}
 
 //	按时间戳查询图片
-	public static JSONArray queryByTime(String uid, long timestamp) {
+	public static ResultSet queryByTime(String uid, long timestamp) {
 		PreparedStatement pstemt = null;
 		ResultSet rs = null;
 		String sql = null;
@@ -299,8 +296,7 @@ public class BaseDao {
 			sql = "select * from images where timestamp=?;";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setLong(1, timestamp);
-			rs = pstemt.executeQuery();
-			return RsToJson.convert(rs);
+			return pstemt.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -344,7 +340,7 @@ public class BaseDao {
 		}
 		return 0;
 	}
-
+//	关闭连接
 	public static void close() {
 		try {
 			conn.close();

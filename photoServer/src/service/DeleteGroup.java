@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.BaseDao;
-
-public class DeleteGroup implements Tools {
+/*
+ * 调用BaseDao的deleteGroup方法
+ * 删除分组
+ * 返回状态
+ */
+public class DeleteGroup implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {

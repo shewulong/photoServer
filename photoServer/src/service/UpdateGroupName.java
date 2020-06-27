@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.BaseDao;
-
-public class UpdateGroupName implements Tools {
+/*
+ * 调用BaseDao的updateGroupName方法
+ * 修改分组名
+ * 返回状态
+ */
+public class UpdateGroupName implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {

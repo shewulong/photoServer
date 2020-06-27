@@ -2,10 +2,13 @@ package service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import dao.BaseDao;
-
-public class DeleteImage implements Tools {
+/*
+ * 调用BaseDao的deleteImage方法
+ * 删除图片
+ * 返回状态
+ */
+public class DeleteImage implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {

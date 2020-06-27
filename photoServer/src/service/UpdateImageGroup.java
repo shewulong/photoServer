@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.BaseDao;
-
-public class UpdateImageGroup implements Tools {
+/*
+ * 调用BaseDao的updateImageGroup方法
+ * 修改图片的所属分组
+ * 返回状态
+ */
+public class UpdateImageGroup implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {
