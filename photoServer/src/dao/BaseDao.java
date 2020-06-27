@@ -2,8 +2,6 @@ package dao;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,13 +10,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.alibaba.fastjson.JSONArray;
-
-import utils.RsToJson;
+import utils.ErrorLog;
 
 public class BaseDao {
 
 	private static Connection conn = null;
+
 //	初始化连接
 	public static void init() {
 		try {
@@ -31,8 +28,7 @@ public class BaseDao {
 			conn = DriverManager.getConnection(url, user, password);
 			bis.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 	}
 
@@ -58,8 +54,7 @@ public class BaseDao {
 			pstemt.setString(1, name);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return null;
 	}
@@ -87,8 +82,7 @@ public class BaseDao {
 			createGroup(uid, "默认");
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -114,8 +108,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -154,8 +147,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -174,8 +166,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -205,8 +196,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -226,8 +216,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -247,8 +236,7 @@ public class BaseDao {
 			pstemt.execute();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -265,8 +253,7 @@ public class BaseDao {
 			pstemt.execute();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -281,8 +268,7 @@ public class BaseDao {
 			pstemt.setInt(1, gid);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return null;
 	}
@@ -298,8 +284,7 @@ public class BaseDao {
 			pstemt.setLong(1, timestamp);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return null;
 	}
@@ -316,8 +301,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
@@ -335,23 +319,22 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return 0;
 	}
+
 //	关闭连接
 	public static void close() {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 	}
 
 	public static void main(String[] args) {
-		
+
 	}
 
 }

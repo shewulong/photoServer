@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import dao.BaseDao;
+import utils.ErrorLog;
 
 public class Server {
 
@@ -29,8 +30,7 @@ public class Server {
 								new PrintStream(socket.getOutputStream())).handle();
 						socket.close();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						ErrorLog.errorLog(e);
 					}
 				}
 			}.start();

@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import com.alibaba.fastjson.JSONArray;
 
 import service.PassData;
+import utils.ErrorLog;
 
 public class Handle {
 
@@ -38,8 +39,7 @@ public class Handle {
 		try {
 			return JSONArray.parseArray(in.readLine());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 		return null;
 	}
@@ -50,8 +50,7 @@ public class Handle {
 			in.close();
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLog.errorLog(e);
 		}
 	}
 
