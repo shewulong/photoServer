@@ -13,6 +13,9 @@ public class RsToJson {
 
 	public static JSONArray convert(ResultSet rs) {
 		JSONArray jsonArr = new JSONArray();
+		if(rs == null) {
+			return jsonArr;
+		}
 		try {
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnCount = metaData.getColumnCount();

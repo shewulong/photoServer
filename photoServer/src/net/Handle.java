@@ -22,10 +22,13 @@ public class Handle {
 
 //	处理请求
 	public void handle() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		JSONArray json = receiveJson();
-		Class<?> clazz = Class.forName(json.getJSONObject(0).getString("clazz"));
-		PassData tools = (PassData) clazz.newInstance();
-		sendJson(tools.work(json));
+		JSONArray jsonArr = receiveJson();
+		if(jsonArr == null) return;
+		Class<?> clazz = Class.forName(jsonArr.getJSONObject(0).getString("clazz"));
+		PassData pd = (PassData) clazz.newInstance();
+		sendJson(pd.work(jsonArr));
+		pd = null;
+		jsonArr = null;
 		closeAll();
 	}
 
@@ -37,9 +40,14 @@ public class Handle {
 //	接收json数据
 	public JSONArray receiveJson() {
 		try {
-			return JSONArray.parseArray(in.readLine());
+			String buf = in.readLine();
+			if("network check".equals(buf)) {
+				out.println("network check");
+				return null;
+			}
+			return JSONArray.parseArray(buf);
 		} catch (IOException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return null;
 	}
@@ -50,13 +58,8 @@ public class Handle {
 			in.close();
 			out.close();
 		} catch (IOException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

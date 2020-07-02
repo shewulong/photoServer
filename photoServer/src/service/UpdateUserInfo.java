@@ -9,7 +9,7 @@ import dao.BaseDao;
  * 修改用户名和密码
  * 返回状态
  */
-public class UpdateUserName implements PassData {
+public class UpdateUserInfo implements PassData {
 
 	@Override
 	public JSONArray work(JSONArray jsonArr) {
@@ -17,7 +17,7 @@ public class UpdateUserName implements PassData {
 		String uid = json.getString("uid");
 		String name = json.getString("name");
 		String password = json.getString("password");
-		int status = BaseDao.updateUserName(uid, name, password);
+		int status = BaseDao.updateUserInfo(uid, name, password);
 		jsonArr.clear();
 		JSONObject result = new JSONObject();
 		result.put("status", status);

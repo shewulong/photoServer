@@ -26,11 +26,13 @@ public class Server {
 			new Thread() {
 				public void run() {
 					try {
-						new Handle(new BufferedReader(new InputStreamReader(socket.getInputStream())),
-								new PrintStream(socket.getOutputStream())).handle();
+						Handle handle = new Handle(new BufferedReader(new InputStreamReader(socket.getInputStream())),
+								new PrintStream(socket.getOutputStream()));
+						handle.handle();
+						handle = null;
 						socket.close();
 					} catch (Exception e) {
-						ErrorLog.errorLog(e);
+						ErrorLog.log(e);
 					}
 				}
 			}.start();

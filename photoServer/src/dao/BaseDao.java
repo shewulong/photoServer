@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.mysql.cj.protocol.Resultset;
+
 import utils.ErrorLog;
 
 public class BaseDao {
@@ -28,7 +30,7 @@ public class BaseDao {
 			conn = DriverManager.getConnection(url, user, password);
 			bis.close();
 		} catch (Exception e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 	}
 
@@ -54,7 +56,7 @@ public class BaseDao {
 			pstemt.setString(1, name);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return null;
 	}
@@ -82,13 +84,13 @@ public class BaseDao {
 			createGroup(uid, "默认");
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
 
 //	修改用户名和密码
-	public static int updateUserName(String uid, String newName, String newPassword) {
+	public static int updateUserInfo(String uid, String newName, String newPassword) {
 		PreparedStatement pstemt = null;
 		ResultSet rs = null;
 		String sql = null;
@@ -98,7 +100,8 @@ public class BaseDao {
 			pstemt.setString(1, newName);
 			rs = pstemt.executeQuery();
 			if (rs.next()) {
-				return 0;
+				if(!uid.equals(rs.getString("uid")))
+					return 0;
 			}
 			sql = "update user set name=?,password=? where uid=?";
 			pstemt = conn.prepareStatement(sql);
@@ -108,7 +111,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
@@ -147,7 +150,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
@@ -166,9 +169,24 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
+	}
+	
+//	查询所有分组
+	public static ResultSet queryAllGroup(String uid) {
+		PreparedStatement pstemt = null;
+		String sql = null;
+		try {
+			sql = "select * from groups where uid=?;";
+			pstemt = conn.prepareStatement(sql);
+			pstemt.setString(1, uid);
+			return pstemt.executeQuery();
+		} catch (SQLException e) {
+			ErrorLog.log(e);
+		}
+		return null;
 	}
 
 //	删除分组
@@ -196,7 +214,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
@@ -216,7 +234,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
@@ -236,7 +254,7 @@ public class BaseDao {
 			pstemt.execute();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
@@ -253,22 +271,23 @@ public class BaseDao {
 			pstemt.execute();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
 
 //	按分组查询图片
-	public static ResultSet queryByTyte(String uid, int gid) {
+	public static ResultSet queryByTyte(String uid, int gid, int offset) {
 		PreparedStatement pstemt = null;
 		String sql = null;
 		try {
-			sql = "select * from images where gid=?;";
+			sql = "select * from images where gid=? limit ?,12;";
 			pstemt = conn.prepareStatement(sql);
 			pstemt.setInt(1, gid);
+			pstemt.setInt(2, offset);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return null;
 	}
@@ -276,7 +295,6 @@ public class BaseDao {
 //	按时间戳查询图片
 	public static ResultSet queryByTime(String uid, long timestamp) {
 		PreparedStatement pstemt = null;
-		ResultSet rs = null;
 		String sql = null;
 		try {
 			sql = "select * from images where timestamp=?;";
@@ -284,7 +302,7 @@ public class BaseDao {
 			pstemt.setLong(1, timestamp);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return null;
 	}
@@ -301,7 +319,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
@@ -319,7 +337,7 @@ public class BaseDao {
 			pstemt.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 		return 0;
 	}
@@ -329,12 +347,11 @@ public class BaseDao {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			ErrorLog.errorLog(e);
+			ErrorLog.log(e);
 		}
 	}
-
+	
 	public static void main(String[] args) {
-
 	}
 
 }
