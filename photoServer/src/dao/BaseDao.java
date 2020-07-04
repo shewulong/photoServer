@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.mysql.cj.protocol.Resultset;
-
 import utils.ErrorLog;
 
 public class BaseDao {
