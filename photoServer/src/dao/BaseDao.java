@@ -281,10 +281,11 @@ public class BaseDao {
 		PreparedStatement pstemt = null;
 		String sql = null;
 		try {
-			sql = "select * from images where gid=? limit ?,12;";
+			sql = "select * from images where uid=? and gid=? limit ?,12;";
 			pstemt = conn.prepareStatement(sql);
-			pstemt.setInt(1, gid);
-			pstemt.setInt(2, offset);
+			pstemt.setString(1, uid);
+			pstemt.setInt(2, gid);
+			pstemt.setInt(3, offset);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
 			ErrorLog.log(e);
@@ -297,9 +298,10 @@ public class BaseDao {
 		PreparedStatement pstemt = null;
 		String sql = null;
 		try {
-			sql = "select * from images where timestamp=?;";
+			sql = "select * from images where uid=? timestamp=?;";
 			pstemt = conn.prepareStatement(sql);
-			pstemt.setLong(1, timestamp);
+			pstemt.setString(1, uid);
+			pstemt.setLong(2, timestamp);
 			return pstemt.executeQuery();
 		} catch (SQLException e) {
 			ErrorLog.log(e);
